@@ -1,0 +1,8 @@
+实现基于 酷Q NoneBot CQHTTP
+
+酷Q就是 CQ 目录下的 CQA.exe，CQHTTP是酷Q的插件
+CQHTTP文档 https://cqhttp.cc/docs/4.15/#/
+NoneBot指南 https://nonebot.cqp.moe/guide/
+
+NoneBot指南里有将三个东西联系起来的方法
+照着NoneBot指南一步一步打一遍差不多就可以了解了

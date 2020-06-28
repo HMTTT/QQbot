@@ -15,8 +15,7 @@ async def _(session: CommandSession):
 
     if session.is_first_run:
         if stripped_arg:
-
-            session.state['hapi'] = stripped_arg
+            session.state['pcr'] = stripped_arg
         return
 
     if not stripped_arg:

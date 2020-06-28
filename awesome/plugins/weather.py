@@ -1,5 +1,7 @@
 from nonebot import on_command, CommandSession
-
+import requests as reqs
+import json
+import re
 
 # on_command 装饰器将函数声明为一个命令处理器
 # 这里 weather 为命令的名字，同时允许使用别名「天气」「天气预报」「查天气」
@@ -41,4 +43,22 @@ async def _(session: CommandSession):
 async def get_weather_of_city(city: str) -> str:
     # 这里简单返回一个字符串
     # 实际应用中，这里应该调用返回真实数据的天气 API，并拼接成天气预报内容
-    return f'{city}的天气是……'
+    zoneID = None
+    with open('awesome\plugins\data\zoneID.json', 'r', encoding='utf-8') as f :
+        zoneID = json.load(f, strict=False)
+    
+    msg = ''
+    print('in')
+    if city not in zoneID:
+        msg = '没有这个城市嗷，只能查市，其他没有'
+    else:
+        html = reqs.get('http://www.weather.com.cn/weather/'+zoneID[city]+'.shtml')
+        html.encoding = 'utf-8'
+        print('iin')
+        tems = (re.findall('<li class="sky skyid .*?<h1>(.*?)</h1>.*?</big>.*?</big>.*?class=.*?">(.*?)</p>.*?<span>(.*?)</span>/<i>(.*?)</i>',html.text, re.DOTALL))
+        newLine = '\r\n'
+        msg += city + '七天天气来了嗷' + newLine
+        for tem in tems:
+            msg += tem[0] + '\t' + tem[2] + '~' + tem[3] + '\t' + tem[1] + newLine
+        print(msg)
+    return msg
