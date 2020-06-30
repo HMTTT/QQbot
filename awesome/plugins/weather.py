@@ -54,11 +54,20 @@ async def get_weather_of_city(city: str) -> str:
     else:
         html = reqs.get('http://www.weather.com.cn/weather/'+zoneID[city]+'.shtml')
         html.encoding = 'utf-8'
-        print('iin')
-        tems = (re.findall('<li class="sky skyid .*?<h1>(.*?)</h1>.*?</big>.*?</big>.*?class=.*?">(.*?)</p>.*?<span>(.*?)</span>/<i>(.*?)</i>',html.text, re.DOTALL))
+        tems = (re.findall('<li class="sky skyid.*?">.*?<h1>(.*?)</h1>.*?</big>.*?</big>.*?class="wea">(.*?)</p>.*?<p class="tem">(.*?)</p>.*?</li>',html.text, re.DOTALL+re.MULTILINE))
         newLine = '\r\n'
+        print(tems)
+        
+        def formatTem(tem):
+            t1 = re.findall('<i>(.*?)</i>', tem)
+            t2 = re.findall('<span>(.*?)</span>', tem)
+            msg = t1[0]
+            if len(t2) > 0:
+                msg += '~' + t2[0]
+            return msg
+            
         msg += city + '七天天气来了嗷' + newLine
         for tem in tems:
-            msg += tem[0] + '\t' + tem[2] + '~' + tem[3] + '\t' + tem[1] + newLine
+            msg += tem[0] + '\t' + formatTem(tem[2]) +'\t' + tem[1] + newLine
         print(msg)
     return msg
