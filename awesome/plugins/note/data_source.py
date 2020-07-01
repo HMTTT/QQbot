@@ -101,6 +101,8 @@ def viewNote(session, op):
     
     viewTitle = viewTitle.strip()
     if viewTitle == '-all':
+        if len(msg.keys()) <= 0:
+            return '没有记录，要先添加'
         return msg.keys()
     
     if viewTitle not in msg.keys():
