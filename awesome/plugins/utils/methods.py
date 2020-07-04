@@ -1,3 +1,5 @@
+import re
+
 '''
 用来帮助设置参数
 args：参数的值
@@ -23,3 +25,5 @@ def setSessionArgs(args, keys, session, format_args=True):
         
     return True
     
+def getOps(op):
+    return re.findall('[^ ]+', op)
