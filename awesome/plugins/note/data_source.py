@@ -7,7 +7,7 @@ def getQQ(session):
     return str(session.ctx['sender']['user_id'])
 
 def getMsg(qq):
-    path = './awesome/plugins/data/note/' + qq + '.json'
+    path = './data/note/' + qq + '.json'
     if not os.path.exists(path):
         return {}
     else:
@@ -20,7 +20,7 @@ def getMsg(qq):
         return tmp
 
 def writeMsg(qq, msg):
-    path = './awesome/plugins/data/note/' + qq + '.json'
+    path = './data/note/' + qq + '.json'
     try:
         with open(path,'w',encoding='utf-8') as f:
             json.dump(msg, f, ensure_ascii=False)
