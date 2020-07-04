@@ -4,9 +4,9 @@ import json
 # 配置文件
 config = {
     "max_level" : 157,
-    "rolePromotionPath" : "./awesome/plugins/data/pcr/角色属性.txt",
-    "roleMsgPath" : "./awesome/plugins/data/pcr/角色详细信息.txt",
-    "roleRankMsgPath" : "./awesome/plugins/data/pcr/角色Rank总提升.txt"
+    "rolePromotionPath" : "./data/pcr/角色属性.txt",
+    "roleMsgPath" : "./data/pcr/角色详细信息.txt",
+    "roleRankMsgPath" : "./data/pcr/角色Rank总提升.txt"
 }
 
 global data 

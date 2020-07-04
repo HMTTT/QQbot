@@ -1,5 +1,7 @@
 import json
 import os
+from awesome.plugins.utils.methods import *
+
 
 def getQQ(session):
     return str(session.ctx['sender']['user_id'])
@@ -27,9 +29,14 @@ def writeMsg(qq, msg):
         return False
 
 def addNote(session, op):
+    keys = ['addTitle', 'addContent']
     if op != '':
-        session.state['addTitle'] = op
-    addTitle = session.get('addTitle',prompt='输入要添加的标题:')
+        setSessionArgs(op.split(' '), keys, session, True)
+    addTitle = session.get('addTitle',prompt='输入要添加的标题[-c]取消:')
+    
+    if addTitle == '-c':
+        return '操作已取消'
+    
     addContent = session.get('addContent', prompt='输入想要添加的内容：')
     
     qq = getQQ(session)
@@ -45,8 +52,11 @@ def delNote(session, op):
     msg = getMsg(str(session.ctx['sender']['user_id']))
     if len(msg.keys()) <= 0 :
         return '没有记录可以删除，请先添加'
+        
+    keys = ['delTitle']
     if op != '':
-        session.state['delTitle'] = op
+        setSessionArgs(op.split(' '), keys, session, True)
+        
     delTitle = session.get('delTitle', prompt='请输入要删除的标题(输入[-c]可以取消此操作)：')
     
     delTitle = delTitle.strip()
@@ -65,9 +75,13 @@ def delNote(session, op):
         return '没有这个记录，可以使用[note v]查看'
       
 def insertNote(session, op):
+    keys = ['addTitle', 'insertContent']
     if op != '':
-        session.state['addTitle'] = op
-    addTitle = session.get('addTitle', prompt='请输入要插入的标题')
+        setSessionArgs(op.split(' '), keys, session, True)
+        
+    addTitle = session.get('addTitle', prompt='请输入要插入的标题，输入[-c]可取消操作:')
+    if addTitle == '-c':
+        return '操作已取消'
     msg = getMsg(getQQ(session))
     if addTitle not in msg.keys():
         flag = session.get('flag', prompt='未找到该标题，是否直接添加？(Y/N)')
@@ -80,7 +94,7 @@ def insertNote(session, op):
         insertContent = session.get('insertContent', prompt='请输入要添加的内容(输入[-c]可以取消此操作)：')
         insertContent = insertContent.strip()
         if insertContent == '-c':
-            return '操作以取消'
+            return '操作已取消'
         
         if type(msg[addTitle]) is not  list:
             msg[addTitle] = [msg[addTitle]]
@@ -95,8 +109,10 @@ def insertNote(session, op):
 def viewNote(session, op):
     msg = getMsg(str(session.ctx['sender']['user_id']))
     op = op.strip()
+    
+    keys = ['viewTitle']
     if op != '':
-        session.state['viewTitle'] = op
+        setSessionArgs(op.split(' '), keys, session, True)
     viewTitle = session.get('viewTitle',prompt='输入要查看的标题(输入[-all]可查看全部记录标题):')
     
     viewTitle = viewTitle.strip()
