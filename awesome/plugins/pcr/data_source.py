@@ -1,12 +1,20 @@
 import requests as reqs
 import json
 import datetime
+import time
+import os
 from collections import Counter
 from .pcrUtils import *
+from .pcrActivityImg import *
 
 newLine = '\r\n'
 
 async def get_msg(op) -> str:
+    fname = time.strftime("%Y%m%d", time.localtime()) + '.png'
+    # 如果图像存在，不用爬取
+    if os.path.exists(f'../CQPro/data/image/myImg/pcr/{fname}'):
+        return f'[CQ:image, file=myImg/pcr/{fname}]'
+
     i = 0
     html = ''
     while i < 3:
@@ -34,7 +42,14 @@ async def get_msg(op) -> str:
             text += 'E：' + huodongItem['end_time'] + newLine
             text += '-------------------------' + newLine
             results.append(text)
-    return results
+
+    #### 测试发图片
+    msg = ''
+    for r in results:
+        msg += r
+    fname = createImg(msg)
+    ####
+    return f'[CQ:image, file={fname}]'
 
 # 人物名单
 async def getRoleNames(op):
@@ -73,11 +88,11 @@ async def getRoleMsg(op):
 # 帮助
 async def getHelp(op):
     msg = '操作有 [] 中的是可选参数：' + newLine
-    msg += '活动' + newLine
-    msg += '人物详细 人物名' + newLine
-    msg += '名单' + newLine
-    msg += 'rank 人名 rank值 [rank值]' + newLine
-    msg += '帮助' + newLine
+    msg += 'pcr 活动' + newLine
+    msg += 'pcr 人物详细 人物名' + newLine
+    msg += 'pcr 名单' + newLine
+    msg += 'pcr rank 人名 rank值 [rank值]' + newLine
+    msg += 'pcr 帮助' + newLine
     return msg
 
 '''
