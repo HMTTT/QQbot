@@ -6,7 +6,7 @@ async def get_weather_of_city(city: str) -> str:
     # 这里简单返回一个字符串
     # 实际应用中，这里应该调用返回真实数据的天气 API，并拼接成天气预报内容
     zoneID = None
-    with open('awesome\plugins\data\zoneID.json', 'r', encoding='utf-8') as f :
+    with open('.\data\zoneID.json', 'r', encoding='utf-8') as f :
         zoneID = json.load(f, strict=False)
     
     msg = ''
